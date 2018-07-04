@@ -6,3 +6,6 @@ discord
 .data
 .profiles
 *.pyc
+keys.json
+*.pem
+lastupload.txt

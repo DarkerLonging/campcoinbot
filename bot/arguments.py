@@ -65,14 +65,14 @@ class Arguments:
     def _parse(self, arg, value):
         argtype = arg[1]
         arg = arg[0]
-        if argtype == Command:
-            for ext in self._ctx._bot.extensions:
-                for c in ext.commands:
-                    if c.name == value:
-                        c.extension = ext
-                        return c
-            raise ArgumentException("Invalid Command", [self, arg, value])
-        elif argtype == discord.Member:
+        #if argtype == Command:
+        #    for ext in self._ctx._bot.extensions:
+        #        for c in ext.commands:
+        #            if c.name == value:
+        #                c.extension = ext
+        #                return c
+        #    raise ArgumentException("Invalid Command", [self, arg, value])
+        if argtype == discord.Member:
             if value.startswith("<@"):
                 value = value[2:-1]
                 if value.startswith("!"):

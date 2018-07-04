@@ -7,13 +7,13 @@ class Shell(bot.Extension):
     """Provides TeamSpeak commands"""
 
     async def shell(ctx, channel):
-        import fcntl
-        def setNonBlocking(fd):
-            flags = fcntl.fcntl(fd, fcntl.F_GETFL)
-            flags = flags | os.O_NONBLOCK
-            fcntl.fcntl(fd, fcntl.F_SETFL, flags)
-        ctx.extension.shells[channel.id] = subprocess.Popen("python3 shell.py", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE, bufsize=1)
-        setNonBlocking(ctx.extension.shells[channel.id].stdout)
+        #import fcntl
+        #def setNonBlocking(fd):
+        #    flags = fcntl.fcntl(fd, fcntl.F_GETFL)
+        #    flags = flags | os.O_NONBLOCK
+        #    fcntl.fcntl(fd, fcntl.F_SETFL, flags)
+        ctx.extension.shells[channel.id] = subprocess.Popen("python shell.py", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE, bufsize=1)
+        #setNonBlocking(ctx.extension.shells[channel.id].stdout)
         while True:
             await asyncio.sleep(0.2)
             output = ctx.extension.shells[channel.id].stdout.readline()
