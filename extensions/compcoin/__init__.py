@@ -117,7 +117,6 @@ class CompCoin(bot.Extension):
         else:
             await message.channel.send("The person hasn't linked their pem files! DM the CampCoin bot your files by drag and dropping the files onto the DM chat, click Upload twice and you should get a response.")
 
-    @bot.role("Mentor")
     @bot.argument("public", str)
     @bot.command()
     async def whois(ctx, message):
