@@ -1,4 +1,4 @@
-
+import simplejson as json
 import requests
 import urllib
 from . import block

@@ -6,8 +6,9 @@ from . import transaction
 from ecdsa import VerifyingKey, SigningKey
 import campcoin_api
 import os
-import json
 import base64
+import simplejson as json
+import asyncio
 
 cc = campcoin_api.CampCoin("https://campcoin.herokuapp.com")
 
@@ -54,6 +55,7 @@ class CompCoin(bot.Extension):
             with open("keys.json", mode='w', encoding='utf-8') as feedsjson:
                 json.dump(keyjson, feedsjson)
 
+    #@bot.dev()
     @bot.argument("amount", int)
     @bot.argument("user+", discord.Member)
     @bot.command()
@@ -61,18 +63,43 @@ class CompCoin(bot.Extension):
         keyjson = json.load(open("keys.json"))
         if str(ctx.args.user.id) in keyjson and str(message.author.id) in keyjson:
             public_key = VerifyingKey.from_pem(keyjson[str(message.author.id)]["public"])
-            publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
-            balance = int(cc.getBalance(publickey))
+            sender_publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
+            balance = float(cc.getBalance(sender_publickey))
             if ctx.args.amount > balance:
                 await message.channel.send("You dont have enough coins!")
                 return
-            private_key = SigningKey.from_pem(keyjson[str(message.author.id)]["private"])
-            public_key = VerifyingKey.from_pem(keyjson[str(ctx.args.user.id)]["public"])
-            publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
-            trx = transaction.Transaction(private_key, publickey, ctx.args.amount)
-            #print(type(trx._asdict()))
-            print(json.dumps(trx._asdict()))
-            cc.postTransaction(trx)
+            await message.channel.send("{} will be taken from your account, do you still want to continue?".format(ctx.args.amount+(ctx.args.amount*0.3)))
+            await message.channel.send("y/n")
+            def is_correct(m):
+                return m.author.id == message.author.id and m.content.strip().lower() in ["y","n"]
+            try:
+                confirm = await ctx._bot.wait_for("message", check=is_correct, timeout=5)
+            except asyncio.TimeoutError:
+                await message.channel.send("Transfer Cancelled")
+                return
+            if not confirm:
+                return
+            if message.author.id != 266918350645362688:
+                private_key = SigningKey.from_pem(keyjson[str(message.author.id)]["private"])
+                public_key = VerifyingKey.from_pem(keyjson[str(266918350645362688)]["public"])
+                publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
+                trx = transaction.Transaction(sender_publickey, publickey, ctx.args.amount * 0.3, None, private_key)
+                cc.postTransaction(trx)
+                if ctx.args.user.id != 266918350645362688:
+                    private_key = SigningKey.from_pem(keyjson[str(266918350645362688)]["private"])
+                    public_key = VerifyingKey.from_pem(keyjson[str(ctx.args.user.id)]["public"])
+                    publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
+                    trx = transaction.Transaction(sender_publickey, publickey, ctx.args.amount, None, private_key)
+                    cc.postTransaction(trx)
+
+            else:
+                private_key = SigningKey.from_pem(keyjson[str(266918350645362688)]["private"])
+                public_key = VerifyingKey.from_pem(keyjson[str(ctx.args.user.id)]["public"])
+                publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
+                trx = transaction.Transaction(sender_publickey, publickey, ctx.args.amount, None, private_key)
+                cc.postTransaction(trx)
+
+            await message.channel.send("Transaction Complete!")
         else:
             await message.channel.send("Users are not linked")
 
