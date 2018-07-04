@@ -124,6 +124,6 @@ class CompCoin(bot.Extension):
         for key in keyjson:
             public_key = VerifyingKey.from_pem(keyjson[key]["public"])
             out = str(base64.b64encode(public_key.to_string()), "utf-8")
-            if message.args.public in out:
+            if ctx.args.public in out:
                 user = message.channel.guild.get_member(int(key))
                 await message.channel.send(user.display_name)
