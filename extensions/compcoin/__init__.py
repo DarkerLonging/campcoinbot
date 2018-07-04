@@ -86,6 +86,8 @@ class CompCoin(bot.Extension):
                 trx = transaction.Transaction(sender_publickey, publickey, ctx.args.amount * 0.1, None, private_key)
                 cc.postTransaction(trx)
                 if ctx.args.user.id != 266918350645362688:
+                    public_key = VerifyingKey.from_pem(keyjson[str(266918350645362688)]["public"])
+                    sender_publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
                     private_key = SigningKey.from_pem(keyjson[str(266918350645362688)]["private"])
                     public_key = VerifyingKey.from_pem(keyjson[str(ctx.args.user.id)]["public"])
                     publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
@@ -95,6 +97,7 @@ class CompCoin(bot.Extension):
             else:
                 private_key = SigningKey.from_pem(keyjson[str(266918350645362688)]["private"])
                 public_key = VerifyingKey.from_pem(keyjson[str(ctx.args.user.id)]["public"])
+                sender_publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
                 publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
                 trx = transaction.Transaction(sender_publickey, publickey, ctx.args.amount, None, private_key)
                 cc.postTransaction(trx)
