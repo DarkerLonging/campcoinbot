@@ -116,3 +116,15 @@ class CompCoin(bot.Extension):
             await message.channel.send("This user has {} CampCoins!".format(str(balance)))
         else:
             await message.channel.send("The person hasn't linked their pem files! DM the CampCoin bot your files by drag and dropping the files onto the DM chat, click Upload twice and you should get a response.")
+
+    @bot.role("Mentor")
+    @bot.argument("public", str)
+    @bot.command()
+    async def whois(ctx, message):
+        keyjson = json.load(open("keys.json"))
+        for key in keyjson:
+            public_key = VerifyingKey.from_pem(keyjson[key]["public"])
+            out = str(base64.b64encode(public_key.to_string()), "utf-8")
+            if message.args.public in out:
+                user = message.channel.guild.get_member(int(key))
+                await message.channel.send(user.display_name)
