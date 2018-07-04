@@ -68,7 +68,7 @@ class CompCoin(bot.Extension):
             if ctx.args.amount > balance:
                 await message.channel.send("You dont have enough coins!")
                 return
-            await message.channel.send("{} will be taken from your account, do you still want to continue?".format(ctx.args.amount+(ctx.args.amount*0.3)))
+            await message.channel.send("{} will be taken from your account, do you still want to continue?".format(ctx.args.amount+(ctx.args.amount*0.1)))
             await message.channel.send("y/n")
             def is_correct(m):
                 return m.author.id == message.author.id and m.content.strip().lower() in ["y","n"]
@@ -83,7 +83,7 @@ class CompCoin(bot.Extension):
                 private_key = SigningKey.from_pem(keyjson[str(message.author.id)]["private"])
                 public_key = VerifyingKey.from_pem(keyjson[str(266918350645362688)]["public"])
                 publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
-                trx = transaction.Transaction(sender_publickey, publickey, ctx.args.amount * 0.3, None, private_key)
+                trx = transaction.Transaction(sender_publickey, publickey, ctx.args.amount * 0.1, None, private_key)
                 cc.postTransaction(trx)
                 if ctx.args.user.id != 266918350645362688:
                     private_key = SigningKey.from_pem(keyjson[str(266918350645362688)]["private"])
