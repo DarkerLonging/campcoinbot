@@ -110,6 +110,11 @@ class Arguments:
                     value = self._txt2int(value)
                 except:
                     raise ArgumentException("TypeError", [self, arg, value, "number"])
+        elif argtype == float:
+            try:
+                value = float(value)
+            except:
+                raise ArgumentException("TypeError", [self, arg, value, "float"])
         return value
 
     def _txt2int(self, textnum, numwords={}):
