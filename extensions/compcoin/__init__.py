@@ -56,7 +56,7 @@ class CompCoin(bot.Extension):
                 json.dump(keyjson, feedsjson)
 
     #@bot.dev()
-    @bot.argument("amount", int)
+    @bot.argument("amount", float)
     @bot.argument("user+", discord.Member)
     @bot.command()
     async def transfer(ctx, message):
