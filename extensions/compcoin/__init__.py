@@ -61,7 +61,7 @@ class CompCoin(bot.Extension):
     @bot.command()
     async def transfer(ctx, message):
         keyjson = json.load(open("keys.json"))
-        if float(ctx.args.user.id) in keyjson and str(message.author.id) in keyjson:
+        if str(ctx.args.user.id) in keyjson and str(message.author.id) in keyjson:
             public_key = VerifyingKey.from_pem(keyjson[str(message.author.id)]["public"])
             sender_publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
             balance = float(cc.getBalance(sender_publickey))
