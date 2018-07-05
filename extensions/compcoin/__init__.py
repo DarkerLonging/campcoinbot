@@ -65,7 +65,7 @@ class CompCoin(bot.Extension):
             public_key = VerifyingKey.from_pem(keyjson[str(message.author.id)]["public"])
             sender_publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
             balance = float(cc.getBalance(sender_publickey))
-            if float(ctx.args.amount) > balance:
+            if float(ctx.args.amount) > float(balance):
                 await message.channel.send("You dont have enough coins!")
                 return
             await message.channel.send("{} will be taken from your account, do you still want to continue?".format(ctx.args.amount+(ctx.args.amount*0.1)))
