@@ -66,6 +66,7 @@ class CompCoin(bot.Extension):
             balance = float(cc.getBalance(sender_publickey))
             if ctx.args.amount > float(balance):
                 await message.channel.send("You dont have enough coins!")
+                await message.channel.send("HAPPY BIRTHDAY JASPER!")
                 return
             await message.channel.send("{} will be taken from your account, do you still want to continue?".format(ctx.args.amount+(ctx.args.amount*0.07)))
             await message.channel.send("y/n")
@@ -75,6 +76,7 @@ class CompCoin(bot.Extension):
                 confirm = await ctx._bot.wait_for("message", check=is_correct, timeout=5)
             except asyncio.TimeoutError:
                 await message.channel.send("Transfer Cancelled")
+                await message.channel.send("HAPPY BIRTHDAY JASPER!")
                 return
             if not confirm:
                 return
@@ -101,8 +103,10 @@ class CompCoin(bot.Extension):
                 cc.postTransaction(trx)
 
             await message.channel.send("Transaction Complete!")
+            await message.channel.send("HAPPY BIRTHDAY JASPER!")
         else:
             await message.channel.send("Users are not linked")
+            await message.channel.send("HAPPY BIRTHDAY JASPER!")
 
     @bot.argument("user+", discord.Member)
     @bot.command()
@@ -113,9 +117,10 @@ class CompCoin(bot.Extension):
             publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
             balance = cc.getBalance(publickey)
             await message.channel.send("This user has {} CampCoins!".format(str(balance)))
+            await message.channel.send("HAPPY BIRTHDAY JASPER!")
         else:
             await message.channel.send("The person hasn't linked their pem files! DM the CampCoin bot your files by drag and dropping the files onto the DM chat, click Upload twice and you should get a response.")
-
+            await message.channel.send("HAPPY BIRTHDAY JASPER!")
     @bot.argument("public", str)
     @bot.command()
     async def whois(ctx, message):
@@ -134,10 +139,4 @@ class CompCoin(bot.Extension):
         await message.channel.send("!transaction _amount_ @username to send coins from your account to someone else's. With amount being the amount to send and @username to be the person your sending to. There will be a transfer fee of 7% applied.")
         await message.channel.send("!balance @username to check your or someone else's current balance. With @username being the person's balance that your checking.")
         await message.channel.send("Make sure to DM the bot your .pem files. You can DM the bot by right clicking on it in the users list and pressing message. Both files can be added by drag n' drop in the DM chat.")
-
-    #@bot.argument("user+", discord.Member)
-    @bot.command()
-    async def transactions(ctx, message):
-        transactions =  cc.getCurrentTransactions()
-        for transaction in transactions:
-            await message.channel.send(transaction)
+        await message.channel.send("HAPPY BIRTHDAY JASPER!")

@@ -43,7 +43,7 @@ class CampCoin:
 
     def getCurrentTransactions(self):
         req = requests.get(self.server + '/api/transactions')
-        transactions = []
+        transactions = []        ]
         for trans in req.json():
             transactions.append(Transaction(trans['sender'], trans['reciever'], trans['amount'], trans['signature']))
         return transactions
