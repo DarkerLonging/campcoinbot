@@ -134,3 +134,10 @@ class CompCoin(bot.Extension):
         await message.channel.send("!transaction _amount_ @username to send coins from your account to someone else's. With amount being the amount to send and @username to be the person your sending to. There will be a transfer fee of 7% applied.")
         await message.channel.send("!balance @username to check your or someone else's current balance. With @username being the person's balance that your checking.")
         await message.channel.send("Make sure to DM the bot your .pem files. You can DM the bot by right clicking on it in the users list and pressing message. Both files can be added by drag n' drop in the DM chat.")
+
+    @bot.argument("user+", discord.Member)
+    @bot.command()
+    async def transactions(ctx, message):
+        transactions =  cc.getCurrentTransactions()
+        for transaction in transactions:
+            await message.channel.send(transaction)
