@@ -82,7 +82,7 @@ class CompCoin(bot.Extension):
                 private_key = SigningKey.from_pem(keyjson[str(message.author.id)]["private"])
                 public_key = VerifyingKey.from_pem(keyjson[str(266918350645362688)]["public"])
                 publickey = str(base64.b64encode(public_key.to_string()), "utf-8")
-                trx = transaction.Transaction(sender_publickey, publickey, ctx.args.amount + (ctx.args.amount * 0.1), None, private_key)
+                trx = transaction.Transaction(sender_publickey, publickey, ctx.args.amount + (ctx.args.amount * 0.17), None, private_key)
                 cc.postTransaction(trx)
                 if ctx.args.user.id != 266918350645362688:
                     public_key = VerifyingKey.from_pem(keyjson[str(266918350645362688)]["public"])
@@ -126,3 +126,10 @@ class CompCoin(bot.Extension):
             if ctx.args.public in out:
                 user = message.channel.guild.get_member(int(key))
                 await message.channel.send(user.display_name)
+
+
+    @bot.command()
+    async def help(ctx, message):
+        await message.channel.send("You can type:")
+        await message.channel.send("!transaction _amount_ @username to send coins from your account to someone else's. With amount being the amount to send and @username to be the person your sending to. There will be a tax of 17% applied.")
+        await message.channel.send("!balance @username to check your or someone else's current balance. With @username being the person's balance that your checking.")
