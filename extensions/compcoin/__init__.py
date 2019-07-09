@@ -129,10 +129,22 @@ class CompCoin(bot.Extension):
                 user = message.channel.guild.get_member(int(key))
                 await message.channel.send(user.display_name)
 
+    @bot.command()
+    async def value(ctx, message):
+        import urllib.request, json
+        contents = urllib.request.urlopen("https://cash.compcamps.com/api/stats/blocksPerHour").read()
+        data = json.loads(contents)
+        total = 0
+        for day in data:
+            for hour in data[day]:
+                total += int(data[day][hour])
+                cad = 10 * round(1/(0.025*total) * 1000) / 1000 
+        await message.channel.send(f"${cad} CAD")
 
     @bot.command()
     async def help(ctx, message):
         await message.channel.send("You can type:")
         await message.channel.send("!transaction _amount_ @username to send coins from your account to someone else's. With amount being the amount to send and @username to be the person your sending to. There will be a transfer fee of 7% applied.")
         await message.channel.send("!balance @username to check your or someone else's current balance. With @username being the person's balance that your checking.")
+        await message.channel.send("!value to see the current value of one CampCoin")
         await message.channel.send("Make sure to DM the bot your .pem files. You can DM the bot by right clicking on it in the users list and pressing message. Both files can be added by drag n' drop in the DM chat.")
