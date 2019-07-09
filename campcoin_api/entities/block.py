@@ -1,18 +1,17 @@
 import hashlib as hashlib
 import datetime as date
+import simplejson as json
 
 # Block object
 class Block:
     # Constructor
-    def __init__(self, index, transactions, nonce, previousHash, hash=None):
+    def __init__(self, index, transactions, nonce, previousHash, timestamp=None):
         self.index = index
         self.transactions = transactions
         self.nonce = nonce
         self.previousHash = previousHash
-        if hash:
-            self.hash = hash
-        else:
-            self.hash = self.hashBlock()
+        self.hash = self.hashBlock()
+        self.timestamp = timestamp
 
     def _asdict(self):
         return self.__dict__
@@ -28,17 +27,13 @@ class Block:
     # Prints out information about the block
     def display(self):
         print("Block #: " + str(self.index))
-        print("transactions: " + self.transactions)
+        print("transactions: " + str(self.transactions))
         print("Nonce: " + str(self.nonce))
-        print("Hash: " + self.hash)
-        print("Previous Hash: " + self.previousHash)
+        print("Hash: " + str(self.hash))
+        print("Previous Hash: " + str(self.previousHash))
         print("")
     
     def validate(self, prefix):
-        if (self.hash != self.hashBlock()):
-            return False
-        # if (self.hash[:4] != "0000"):
-        #      return False
         if (self.hash[:len(prefix)] != prefix):
             return False
         return True
@@ -49,4 +44,4 @@ def createGenesisBlock():
 
 def nextBlock(lastBlock, transactions, nonce):
     index = lastBlock.index + 1
-    return Block(index, transactions, nonce, lastBlock.hash)
+    return Block(index, json.dumps(transactions), nonce, lastBlock.hash)

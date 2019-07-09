@@ -10,7 +10,10 @@ class App:
                 deps = deptxt.read().split("\n")
             for dep in deps:
                 if dep.strip() != "":
-                    logger.info("  Installing {}".format(dep))
+                    try:
+                        logger.info("  Installing {}".format(dep))
+                    except:
+                        print(f"Installing {dep}")
                     subprocess.check_call([sys.executable, '-m', 'pip', 'install', dep, '--upgrade', '--user'], stdout=subprocess.PIPE, stderr = subprocess.PIPE)
             import hashlib
             with open(".data/deps.md5", "w") as dephash:

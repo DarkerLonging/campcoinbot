@@ -10,7 +10,7 @@ import base64
 import simplejson as json
 import asyncio
 
-cc = campcoin_api.CampCoin("https://campcoin.herokuapp.com")
+cc = campcoin_api.CompCampsCashApi("http://compcamps-cash.herokuapp.com/")
 
 class CompCoin(bot.Extension):
     """Code for CompCoin Bot"""
