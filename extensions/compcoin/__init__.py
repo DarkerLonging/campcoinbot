@@ -59,6 +59,9 @@ class CompCoin(bot.Extension):
     @bot.argument("user+", discord.Member)
     @bot.command()
     async def transfer(ctx, message):
+        if ctx.amount < 0:
+            await message.channel.send("No negatives! :(")
+            return
         keyjson = json.load(open("keys.json"))
         if str(ctx.args.user.id) in keyjson and str(message.author.id) in keyjson:
             public_key = VerifyingKey.from_pem(keyjson[str(message.author.id)]["public"])
