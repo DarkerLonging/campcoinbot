@@ -142,6 +142,17 @@ class CompCoin(bot.Extension):
         await message.channel.send(f"${cad} CAD")
 
     @bot.command()
+    async def blocks(ctx, message):
+        import urllib.request, json
+        contents = urllib.request.urlopen("https://cash.compcamps.com/api/stats/blocksPerHour").read()
+        data = json.loads(contents)
+        total = 0
+        for day in data:
+            for hour in data[day]:
+                total += int(data[day][hour])
+        await message.channel.send(f"A total of {total} blocks have been mined.")
+
+    @bot.command()
     async def help(ctx, message):
         await message.channel.send("You can type:")
         await message.channel.send("!transaction _amount_ @username to send coins from your account to someone else's. With amount being the amount to send and @username to be the person your sending to. There will be a transfer fee of 7% applied.")
