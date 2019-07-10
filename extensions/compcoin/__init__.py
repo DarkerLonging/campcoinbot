@@ -59,7 +59,7 @@ class CompCoin(bot.Extension):
     @bot.argument("user+", discord.Member)
     @bot.command()
     async def transfer(ctx, message):
-        if ctx.amount < 0:
+        if ctx.args.amount < 0:
             await message.channel.send("No negatives! :(")
             return
         keyjson = json.load(open("keys.json"))
@@ -155,7 +155,7 @@ class CompCoin(bot.Extension):
     @bot.command()
     async def help(ctx, message):
         await message.channel.send("You can type:")
-        await message.channel.send("`!transaction _amount_ @username` to send coins from your account to someone else's. With amount being the amount to send and @username to be the person your sending to. There will be a transfer fee of 7% applied.\n")
+        await message.channel.send("`!transfer _amount_ @username` to send coins from your account to someone else's. With amount being the amount to send and @username to be the person your sending to. There will be a transfer fee of 7% applied.\n")
         await message.channel.send("`!balance @username` to check your or someone else's current balance. With @username being the person's balance that your checking.\n")
         await message.channel.send("`!value` to see the current value of one CampCoin\n")
         await message.channel.send("`!blocks` to see how many blocks have been mined\n")
